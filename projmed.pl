@@ -28,7 +28,6 @@ menu1(2):-
 	dalej(Odp),
 	(Odp = t, menu1(2) ; menu).
 
-
 start:-
     write('Jak masz na imie?'), nl,
     read_line_to_codes(user_input,Codes1),
@@ -43,10 +42,9 @@ start:-
     write('Chcesz sprobowac ponownie? (t/n)'), nl,
     read(Resp),\+ Resp=t, nl,
     write('Dzieki za wspolprace'),
-    abolish(known,3) .
+    abolish(known,3).
 
-
-symptom(X, Val):- nl, write(X), ask(' czy odczuwasz symptom taki jak ',Val).
+symptom(_, Val):- nl, ask('Czy odczuwasz symptom taki jak ',Val).
 
 ask(Pytanie, Val):- known(Pytanie, Val, true),!.
 ask(Pytanie, Val):- known(Pytanie, Val, false),!, fail.
@@ -60,20 +58,23 @@ ask(Pytanie, Val):-
 diagnose(Pacjent):-
     nl, hipoteza(Pacjent,Disease),
     !, nl,
-    write('Moze to byc '),
+    write(Pacjent),
+    write(' ,prawdopodobnie twoja choroba to: '),
     write(Disease), nl,
-    write('Czy chcesz dowiedziec sie wiecej o tej chorobie? (t/n)'), nl,
-    read(Resp),
+    info(Disease).
+
+diagnose(_):-
+    nl, write('Niestety nie wiem co to za choroba').
+
+info(Disease):-
+    write('Czy chcesz dowiedziec sie wiecej o tej chorobie? (t/n)'), nl, nl,
+    read(Resp), nl,
     \+ Resp=t
     ->
     menu;
     dokumentacja(Disease).
 
-
-diagnose(_):-
-    nl, write('Niestety nie wiem co to za choroba').
-
-
 capitalize([],[]).
+
 capitalize([H1|T], [H2|T]):-
     code_type(H2, to_upper(H1)).
