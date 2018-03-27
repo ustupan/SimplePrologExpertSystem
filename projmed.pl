@@ -40,7 +40,7 @@ start:-
     dynamic(known/3),
     retractall(known/3),
     diagnose(Name), nl, nl,
-    write('Chcesz sprobowac ponownie ? (t/n)'), nl,
+    write('Chcesz sprobowac ponownie? (t/n)'), nl,
     read(Resp),\+ Resp=t, nl,
     write('Dzieki za wspolprace'),
     abolish(known,3) .
@@ -61,10 +61,18 @@ diagnose(Pacjent):-
     nl, hipoteza(Pacjent,Disease),
     !, nl,
     write('Moze to byc '),
-    write(Disease).
+    write(Disease), nl,
+    write('Czy chcesz dowiedziec sie wiecej o tej chorobie? (t/n)'), nl,
+    read(Resp),
+    \+ Resp=t
+    ->
+    menu;
+    dokumentacja(Disease).
+
 
 diagnose(_):-
     nl, write('Niestety nie wiem co to za choroba').
+
 
 capitalize([],[]).
 capitalize([H1|T], [H2|T]):-
