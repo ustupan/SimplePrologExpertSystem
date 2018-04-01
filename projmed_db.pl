@@ -16,8 +16,8 @@ rodzaj(Pacjent, uklad_pokarmowy) :-
 rodzaj(Pacjent, laryngologiczne) :-
         symptom(Pacjent,goraczka).
 
-rodzaj(Pacjent, reumatyczne) :-
-        false.
+rodzaj(_, reumatyczne) :-
+        wiek(1).
 
 rodzaj(Pacjent, hormonalne) :-
         symptom(Pacjent,depresja).
@@ -205,7 +205,7 @@ hipoteza(Pacjent,perforacja_blony_bebenkowej) :-
         symptom(Pacjent,szumy_uszu),
         symptom(Pacjent,goraczka).
 
-hipoteza(Pacjent,robne_zapalenie_migdalkow) :-
+hipoteza(Pacjent,ropne_zapalenie_migdalkow) :-
         rodzaj(Pacjent,laryngologiczne),
         symptom(Pacjent,bol_gardla),
         symptom(Pacjent,bol_brzucha),
@@ -222,7 +222,7 @@ hipoteza(Pacjent,choroba_stilla) :-
         symptom(Pacjent,bol_garlda),
         symptom(Pacjent,szumy_uszu).
 
-hipoteza(Pacjent,choroba_stawow_krekow_szyjnych) :-
+hipoteza(Pacjent,choroba_stawow_kregow_szyjnych) :-
         rodzaj(Pacjent,reumatyczne),
         symptom(Pacjent,bol_glowy),
         symptom(Pacjent,omdlenia),
@@ -421,3 +421,21 @@ dokumentacja(perforacja_blony_bebenkowej) :-
     write('glownej czesci ucha srodkowego, ktora odgrywa kluczowa role w procesie slyszenia.'), nl,
     write('To wlasnie dzieki bebenkowi fale dzwiekowe mogą byc przeksztalcone w drgania i'), nl,
     write('przeniesione na kosteczki sluchowe.'), nl.
+
+dokumentacja(ropne_zapalenie_migdalkow) :-
+    write('Ropne zapalenie migdalkow, popularnie zwane angina, to choroba zakazna,'), nl,
+    write('ktora wywoluje ogromny dyskomfort i bywa trudna w wyleczeniu. Chory ma'), nl,
+    write('problemy z oddychaniem, przelykaniem, czuje sie rozbity i oslabiony.'), nl.
+
+dokumentacja(choroba_stilla) :-
+    write('Choroba Stilla ma objawy wystepujace przy wielu innych chorobach - towarzysza'), nl,
+    write('jej gorączka, wysypka, powiększenie węzłów chłonnych i śledziony oraz zmiany'), nl,
+    write('zapalne wystepujace w obrebie stawow.'), nl.
+
+dokumentacja(choroba_stawow_kregow_szyjnych) :-
+    write('Wszelkie dysfunkcje ruchowe, w tym pojawiajace sie chwilowe badz miejscowe paralize,'), nl,
+    write('odretwienia, skurcze i niedowlady konczyn moga byc spowodowane choroba kregow szyjnych. '), nl,
+    write('Jedna z czesciej pojawiajacych sie dolegliwosci jest dretwienie prawej reki.'), nl.
+
+dokumentacja(_) :-
+    write('Niestety nie mamy tej choroby w dokumentacji :)'), nl.
