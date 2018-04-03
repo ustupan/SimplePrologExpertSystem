@@ -300,7 +300,7 @@ hipoteza(Pacjent,zawal) :-
 
 hipoteza(Pacjent,nowotwor_serca) :-
         rodzaj(Pacjent,choroby_serca),
-        symptom(Pacjent,hipoteza(Pacjent,arytmia)),
+        hipoteza(Pacjent,arytmia),
         symptom(Pacjent,kaszel),
         symptom(Pacjent,zmeczenie),
         symptom(Pacjent,goraczka),
