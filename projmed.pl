@@ -3,6 +3,7 @@
 :-(clause(dokumentacja(_),_); consult('dokumentacja_db.pl')).
 
 menu:-
+    shell(clear),
     write('********************************************************'), nl,
     write('*                                                      *'), nl,
     write('*                      PROJMED.                        *'), nl,
@@ -28,7 +29,8 @@ menul(2):-
     nl,nl,
     write('Podaj chorobe, aby sprawdzic czy mamy ja w bazie:'), nl,
     read_line_to_codes(user_input,MenuCodes),
-    wyszukaj(MenuCodes).
+    wyszukaj(MenuCodes),
+    halt.
 
 menul(3):-
     nl,nl,
@@ -58,10 +60,13 @@ start:-
     retractall(known/3),
     diagnose(Name), nl, nl,
     write('Chcesz sprobowac ponownie? (t/n)'), nl,
-    read(Resp),\+ Resp=t, nl, nl,
+    read_line_to_codes(user_input,MenuCodes),
+    string_codes(Resp,MenuCodes),
+    \+ Resp= "t", nl, nl,
     write('Dzieki za wspolprace'),
     abolish(known,3),
-    abolish(wiek,1).
+    abolish(wiek,1),
+    halt.
 
 symptom(_, Val):- nl, ask('Czy odczuwasz symptom taki jak ',Val).
 
@@ -69,9 +74,12 @@ ask(Pytanie, Val):- known(Pytanie, Val, true),!.
 ask(Pytanie, Val):- known(Pytanie, Val, false),!, fail.
 
 ask(Pytanie, Val):-
+    shell(clear),
     write(Pytanie),write(Val) , write('? (t/n)'), nl,
-    read(Ans), !,
-    ((Ans=t, assert(known(Pytanie, Val, true)));
+    read_line_to_codes(user_input,MenuCodes),
+    string_codes(Ans,MenuCodes),
+    !,
+    ((Ans="t", assert(known(Pytanie, Val, true)));
     (assert(known(Pytanie, Val, false)),fail)).
 
 diagnose(Pacjent):-
@@ -87,11 +95,12 @@ diagnose(_):-
 
 info(Disease):-
     write('Czy chcesz dowiedziec sie wiecej o tej chorobie? (t/n)'), nl, nl,
-    read(Resp), nl,
-    \+ Resp=t
+    read_line_to_codes(user_input,MenuCodes),
+    string_codes(Resp,MenuCodes),
+    \+ Resp= "t"
     ->
     true;
-    dokumentacja(Disease).
+    dokumentacja(Disease), !.
 
 capitalize([],[]).
 
@@ -104,19 +113,15 @@ istBiggerThen(X,Y) :-
     assert(wiek(0)).
 
 wyszukaj(Choroba):-
-    \+ file_contains('b.txt', Choroba),
+    \+ file_contains('projmed_db.pl', Choroba),
     write('Nie posiadamy jej w bazie'), nl,
     !.
 
 wyszukaj(Choroba):-
-    file_contains('b.txt', Choroba),
+    file_contains('projmed_db.pl', Choroba),
     write('Tak posiadamy ja w bazie!'), nl,
-    write('Czy chcesz dowiedziec sie wiecej o tej chorobie? (t/n)'), nl, nl,
-    read(Resp), nl,
-    \+ Resp=t
-    ->
-    true;
-    dokumentacja(Choroba).
+    atom_codes(Nazwa,Choroba),
+    info(Nazwa).
 
 file_contains(File, Pattern) :-
     phrase_from_file(match(Pattern), File).
